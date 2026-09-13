@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!-- .NET 4.7.2 is used with mono -->
+		<TargetFramework>net472</TargetFramework>
+
+		<!-- Use the latest C# version to get the newest features -->
+		<LangVersion>latest</LangVersion>
+
+		<!-- Allow variables to be null, which may help you write better code -->
+		<Nullable>enable</Nullable>
+
+		<!-- Include information about what functions are called to make debugging easier. -->
+		<!-- Build the mod in "Release" configuration to disable this (recommended).-->
+		<DebugType Condition="'$(Configuration)'=='Debug'">embedded</DebugType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Allows us to use all of the functions Gorilla Tag offers. -->
+		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="HarmonyLib">
+			<HintPath>$(DependenciesPath)\0Harmony.dll</HintPath>
+		</Reference>
+		<Reference Include="BepInEx">
+			<HintPath>$(DependenciesPath)\BepInEx.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<!-- This item group automatically imports all game assemblies except for problematic ones-->
+	<ItemGroup>
+		<_GameDlls Include="$(GameAssemblyPath)\*.dll" Exclude="$(GameAssemblyPath)\mscorlib.dll;$(GameAssemblyPath)\System*.dll" />
+
+		<Reference Include="@(_GameDlls)">
+			<HintPath>%(Identity)</HintPath>
+		</Reference>
+	</ItemGroup>
+</Project>

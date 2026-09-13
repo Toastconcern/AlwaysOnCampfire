@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+    <!-- Copy the finished mod to your build folder -->
+        <Target Name="CopyToBuild" AfterTargets="Build">
+		<Copy SourceFiles="$(TargetPath)" DestinationFiles="Build\$(MSBuildProjectName).dll"/>
+		<Message Text="$(MSBuildProjectName).dll -> Build\$(MSBuildProjectName).dll" Importance="high"/>
+	</Target>
+
+    <!-- Copy the finished mod to your BepInEx mods folder if it exists -->
+	<Target Name="InstallToBepInEx" AfterTargets="Build" Condition="Exists('$(GamePath)\BepInEx\plugins')">
+		<Copy SourceFiles="$(TargetPath)" DestinationFiles="$(GamePath)\BepInEx\plugins\$(SolutionName)\$(MSBuildProjectName).dll"/>
+		<Message Text="$(MSBuildProjectName).dll -> BepInEx\plugins\$(SolutionName)\$(MSBuildProjectName).dll" Importance="high"/>
+	</Target>
+</Project>
